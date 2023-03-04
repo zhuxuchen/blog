@@ -21,4 +21,9 @@
         (select tag_id from ms_article_tag where article_id = #{articleId})
 
     </select>
+
+    <!--  List<Long> findHotTagIds(int limit);  -->
+    <select id="findHotTagIds" parameterType="int" resultType="java.lang.Long">
+        select tag_id from ms_article_tag group by tag_id order by count(*) desc limit #{limit}
+    </select>
 </mapper>

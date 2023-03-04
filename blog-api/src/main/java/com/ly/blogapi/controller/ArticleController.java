@@ -27,6 +27,8 @@ public class ArticleController {
 
     /**
      * 首页 文章列表
+     * @param pageParams 页面参数
+     * @return com.ly.blogapi.vo.Result
      */
     @PostMapping
     public Result listArticle(@RequestBody PageParams pageParams) {

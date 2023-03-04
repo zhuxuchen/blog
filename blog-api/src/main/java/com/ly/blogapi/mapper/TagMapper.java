@@ -13,7 +13,19 @@ import java.util.List;
 */
 public interface TagMapper extends BaseMapper<Tag> {
 
+    /**
+     * 根据文章id查询标签
+     * @param articleId 文章id
+     * @return java.util.List<com.ly.blogapi.entity.Tag>
+     */
     List<Tag> findTagsByArticleId(Long articleId);
+
+    /**
+     * 查询最热的标签 前n条
+     * @param limit 查询前几条
+     * @return java.util.List<java.lang.Long>
+     */
+    List<Long> findHotTagIds(int limit);
 }
 
 

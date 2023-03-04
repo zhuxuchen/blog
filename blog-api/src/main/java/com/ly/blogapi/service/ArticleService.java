@@ -13,5 +13,10 @@ import com.ly.blogapi.vo.params.PageParams;
 */
 public interface ArticleService extends IService<Article> {
 
+    /**
+     * 首页获取文章列表信息
+     * @param pageParams 页面参数
+     * @return com.ly.blogapi.vo.Result
+     */
     Result listArticle(PageParams pageParams);
 }
