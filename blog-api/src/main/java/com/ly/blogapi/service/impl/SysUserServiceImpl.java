@@ -6,6 +6,8 @@ import com.ly.blogapi.service.SysUserService;
 import com.ly.blogapi.mapper.SysUserMapper;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 /**
 * @author zhuxuchen
 * @description 针对表【ms_sys_user】的数据库操作Service实现

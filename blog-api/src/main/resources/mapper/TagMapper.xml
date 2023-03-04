@@ -13,4 +13,12 @@
     <sql id="Base_Column_List">
         id,avatar,tag_name
     </sql>
+
+    <!--  List<Tag> findTagsByArticleId(Long articleId);  -->
+    <select id="findTagsByArticleId" parameterType="long" resultType="com.ly.blogapi.entity.Tag">
+        select id,avatar,tag_name as tagName from ms_tag
+        where id in
+        (select tag_id from ms_article_tag where article_id = #{articleId})
+
+    </select>
 </mapper>

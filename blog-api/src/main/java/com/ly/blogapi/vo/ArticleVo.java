@@ -1,11 +1,14 @@
 package com.ly.blogapi.vo;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.List;
 
 /**
- * <p></p>
+ * <p>
+ *     文章视图类
+ * </p>
  *
  * @author zhuxuchen
  * @since 2023-03-03
