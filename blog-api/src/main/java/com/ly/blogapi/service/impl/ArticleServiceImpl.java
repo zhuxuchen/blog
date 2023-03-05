@@ -13,6 +13,7 @@ import com.ly.blogapi.mapper.ArticleMapper;
 import com.ly.blogapi.service.ArticleService;
 import com.ly.blogapi.service.SysUserService;
 import com.ly.blogapi.service.TagService;
+import com.ly.blogapi.vo.Archives;
 import com.ly.blogapi.vo.ArticleVo;
 import com.ly.blogapi.vo.Result;
 import com.ly.blogapi.vo.params.PageParams;
@@ -76,6 +77,12 @@ implements ArticleService{
                 .last("limit " + limit);
         List<Article> articles = articleMapper.selectList(queryWrapper);
         return Result.success(copyList(articles, false, false));
+    }
+
+    @Override
+    public Result listArchives() {
+        List<Archives> archivesList = articleMapper.listArchives();
+        return Result.success(archivesList);
     }
 
     private List<ArticleVo> copyList(List<Article> articleList, boolean isTag, boolean isAuthor) {

@@ -33,4 +33,10 @@ public interface ArticleService extends IService<Article> {
      * @return com.ly.blogapi.vo.Result
      */
     Result newArticle(int limit);
+
+    /**
+     * 首页获取文章归档
+     * @return com.ly.blogapi.vo.Result
+     */
+    Result listArchives();
 }

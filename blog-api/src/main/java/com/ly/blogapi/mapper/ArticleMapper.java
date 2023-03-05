@@ -2,6 +2,9 @@ package com.ly.blogapi.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ly.blogapi.entity.Article;
+import com.ly.blogapi.vo.Archives;
+
+import java.util.List;
 
 
 /**
@@ -13,4 +16,5 @@ import com.ly.blogapi.entity.Article;
 public interface ArticleMapper extends BaseMapper<Article> {
 
 
+    List<Archives> listArchives();
 }

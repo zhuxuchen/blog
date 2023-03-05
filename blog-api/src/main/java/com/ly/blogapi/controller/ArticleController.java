@@ -54,4 +54,13 @@ public class ArticleController {
         int limit = 5;
         return articleService.newArticle(limit);
     }
+
+    /**
+     * 首页 文章归档
+     * @return com.ly.blogapi.vo.Result
+     */
+    @PostMapping("/listArchives")
+    public Result listArchives() {
+        return articleService.listArchives();
+    }
 }

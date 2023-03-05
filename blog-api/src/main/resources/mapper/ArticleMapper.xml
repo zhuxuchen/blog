@@ -23,4 +23,13 @@
         weight,author_id,body_id,
         category_id
     </sql>
+
+    <!--  List<Archives> listArchives();  -->
+    <select id="listArchives" resultType="com.ly.blogapi.vo.Archives">
+        select year(from_unixtime(create_date/1000)) as year,
+               month(from_unixtime(create_date/1000)) as month,
+               count(*) as count
+        from ms_article
+        group by year,month
+    </select>
 </mapper>
