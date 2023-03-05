@@ -19,4 +19,18 @@ public interface ArticleService extends IService<Article> {
      * @return com.ly.blogapi.vo.Result
      */
     Result listArticle(PageParams pageParams);
+
+    /**
+     * 首页获取最热文章
+     * @param limit
+     * @return com.ly.blogapi.vo.Result
+     */
+    Result hotArticle(int limit);
+
+    /**
+     * 首页获取最新文章
+     * @param limit
+     * @return com.ly.blogapi.vo.Result
+     */
+    Result newArticle(int limit);
 }

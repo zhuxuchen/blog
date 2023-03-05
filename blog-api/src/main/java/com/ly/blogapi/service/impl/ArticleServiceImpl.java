@@ -3,7 +3,9 @@ package com.ly.blogapi.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ly.blogapi.entity.Article;
@@ -47,22 +49,49 @@ implements ArticleService{
         queryWrapper.orderByDesc(Article::getWeight, Article::getCreateDate);
         Page<Article> articlePage = articleMapper.selectPage(page, queryWrapper);
         List<Article> articleList = articlePage.getRecords();
-        List<ArticleVo> articleVoList = copyList(articleList);
+        List<ArticleVo> articleVoList = copyList(articleList, true, true);
 
         return Result.success(articleVoList);
     }
-    private List<ArticleVo> copyList(List<Article> articleList) {
+
+    @Override
+    public Result hotArticle(int limit) {
+        // select id,title from article order by view_counts desc limit 5
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .select(Article::getId,Article::getTitle)
+                .orderByDesc(Article::getViewCounts)
+                .last("limit " + limit);
+        List<Article> articles = articleMapper.selectList(queryWrapper);
+        return Result.success(copyList(articles, false, false));
+    }
+
+    @Override
+    public Result newArticle(int limit) {
+        // select id,title from article order by create_date desc limit 5
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .select(Article::getId,Article::getTitle)
+                .orderByDesc(Article::getCreateDate)
+                .last("limit " + limit);
+        List<Article> articles = articleMapper.selectList(queryWrapper);
+        return Result.success(copyList(articles, false, false));
+    }
+
+    private List<ArticleVo> copyList(List<Article> articleList, boolean isTag, boolean isAuthor) {
         List<ArticleVo> articleVoList = new ArrayList<>();
         for (Article article : articleList) {
-            articleVoList.add(copy(article,true,true));
+            articleVoList.add(copy(article,isTag,isAuthor));
         }
         return articleVoList;
     }
     private ArticleVo copy(Article article, boolean isTag, boolean isAuthor) {
         ArticleVo articleVo = new ArticleVo();
         BeanUtil.copyProperties(article, articleVo);
-
-        articleVo.setCreateDate(new DateTime(article.getCreateDate()).toString("yyyy-MM-dd HH:mm"));
+        Long createDate = article.getCreateDate();
+        if (createDate != null) {
+            articleVo.setCreateDate(new DateTime(createDate).toString("yyyy-MM-dd HH:mm"));
+        }
         if (isTag) {
             Long articleId = article.getId();
             articleVo.setTags(tagService.findTagsByArticleId(articleId));

@@ -34,4 +34,24 @@ public class ArticleController {
     public Result listArticle(@RequestBody PageParams pageParams) {
         return articleService.listArticle(pageParams);
     }
+
+    /**
+     * 首页 最热文章
+     * @return com.ly.blogapi.vo.Result
+     */
+    @PostMapping("/hot")
+    public Result hotArticle() {
+        int limit = 5;
+        return articleService.hotArticle(limit);
+    }
+
+    /**
+     * 首页 最新文章
+     * @return com.ly.blogapi.vo.Result
+     */
+    @PostMapping("/new")
+    public Result newArticle() {
+        int limit = 5;
+        return articleService.newArticle(limit);
+    }
 }
