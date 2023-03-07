@@ -15,6 +15,7 @@ import com.ly.blogapi.vo.Result;
 import com.ly.blogapi.vo.params.LoginParam;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -96,5 +97,43 @@ public class LoginServiceImpl implements LoginService {
     public Result logout(String token) {
         stringRedisTemplate.delete("TOKEN_" + token);
         return Result.success(null);
+    }
+
+    @Override
+    @Transactional
+    public Result register(LoginParam loginParam) {
+        /*
+         * 1、判断参数是否合法
+         * 2、判断账户是否存在 存在则返回账户已经注册
+         * 3、不存在 注册账户
+         * 4、生成token
+         * 5、存入Redis 并返回
+         * 6、注意加上事务 一旦中间的任何过程出现问题 注册的用户需要回滚
+         */
+        String account = loginParam.getAccount();
+        String password = loginParam.getPassword();
+        String nickname = loginParam.getNickname();
+        if (StrUtil.isBlank(account) || StrUtil.isBlank(password) || StrUtil.isBlank(nickname)) {
+            return Result.fail(ErrorCode.PARAMS_ERROR.getCode(), ErrorCode.PARAMS_ERROR.getMsg());
+        }
+        SysUser sysUser = sysUserService.query().eq("account", account).one();
+        if (sysUser != null) {
+            return Result.fail(ErrorCode.ACCOUNT_EXIST.getCode(),"账户已经被注册了");
+        }
+        sysUser = new SysUser();
+        sysUser.setNickname(nickname);
+        sysUser.setAccount(account);
+        sysUser.setPassword(DigestUtil.md5Hex(password + slat));
+        sysUser.setCreateDate(System.currentTimeMillis());
+        sysUser.setLastLogin(System.currentTimeMillis());
+        sysUser.setAvatar("/static/img/logo.b3a48c0.png");
+        sysUser.setAdmin(false); //1 为true
+        sysUser.setDeleted(false); // 0 为false
+        sysUserService.save(sysUser);
+
+        String token = JWTUtils.createToken(sysUser.getId());
+        stringRedisTemplate.opsForValue()
+                .set("TOKEN_" + token, JSONUtil.toJsonStr(sysUser), 1, TimeUnit.DAYS);
+        return Result.success(token);
     }
 }

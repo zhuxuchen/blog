@@ -35,4 +35,11 @@ public interface LoginService {
      * @return com.ly.blogapi.vo.Result
      */
     Result logout(String token);
+
+    /**
+     * 注册功能
+     * @param loginParam
+     * @return com.ly.blogapi.vo.Result
+     */
+    Result register(LoginParam loginParam);
 }
