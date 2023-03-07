@@ -21,5 +21,18 @@ public interface LoginService {
      */
     Result login(LoginParam loginParam);
 
+    /**
+     * 验证token信息
+     * @param token
+     * @return com.ly.blogapi.entity.SysUser
+     */
+
     SysUser checkToken(String token);
+
+    /**
+     * 登出功能
+     * @param token
+     * @return com.ly.blogapi.vo.Result
+     */
+    Result logout(String token);
 }
