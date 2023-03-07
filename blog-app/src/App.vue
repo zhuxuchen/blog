@@ -7,6 +7,7 @@
 
 <script>
 import GoTop from '@/components/gotop/GoTop'
+
 export default {
   name: 'App',
   components: { GoTop }

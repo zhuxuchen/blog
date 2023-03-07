@@ -63,9 +63,9 @@
 </template>
 
 <script>
-  import {publishComment} from '@/api/comment'
+import {publishComment} from '@/api/comment'
 
-  export default {
+export default {
     name: "CommentItem",
     props: {
       articleId: Number,

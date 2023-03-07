@@ -1,7 +1,8 @@
 package com.ly.blogapi.entity;
 
-import java.io.Serializable;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * 

@@ -5,11 +5,11 @@
 </template>
 
 <script>
-  import ArticleItem from '@/components/article/ArticleItem'
-  import ScrollPage from '@/components/scrollpage'
-  import {getArticles} from '@/api/article'
+import ArticleItem from '@/components/article/ArticleItem'
+import ScrollPage from '@/components/scrollpage'
+import {getArticles} from '@/api/article'
 
-  export default {
+export default {
     name: "ArticleScrollPage",
     props: {
       offset: {

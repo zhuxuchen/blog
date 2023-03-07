@@ -27,10 +27,10 @@
 </template>
 
 <script>
-  import ArticleScrollPage from '@/views/common/ArticleScrollPage'
-  import {listArchives} from '@/api/article'
+import ArticleScrollPage from '@/views/common/ArticleScrollPage'
+import {listArchives} from '@/api/article'
 
-  export default {
+export default {
     name: "BlogArchive",
     components: {
       ArticleScrollPage

@@ -25,16 +25,15 @@
         </el-form-item>
       </el-form>
 
-  
+
 
     </div>
   </div>
 </template>
 
 <script>
-  import {register} from '@/api/login'
 
-  export default {
+export default {
     name: 'Register',
     data() {
       return {

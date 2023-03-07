@@ -31,9 +31,8 @@
 </template>
 
 <script>
-  import { formatTime } from "../../utils/time";
 
-  export default {
+export default {
     name: 'ArticleItem',
     props: {
       id: String,

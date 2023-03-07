@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
-import {getToken, setToken, removeToken} from '@/request/token'
-import {login, getUserInfo, logout, register} from '@/api/login'
+import {getToken, removeToken, setToken} from '@/request/token'
+import {getUserInfo, login, logout, register} from '@/api/login'
 
 Vue.use(Vuex);
 

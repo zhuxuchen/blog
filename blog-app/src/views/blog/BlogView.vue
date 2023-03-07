@@ -109,14 +109,14 @@
 </template>
 
 <script>
-  import MarkdownEditor from '@/components/markdown/MarkdownEditor'
-  import CommmentItem from '@/components/comment/CommentItem'
-  import {viewArticle} from '@/api/article'
-  import {getCommentsByArticle, publishComment} from '@/api/comment'
+import MarkdownEditor from '@/components/markdown/MarkdownEditor'
+import CommmentItem from '@/components/comment/CommentItem'
+import {viewArticle} from '@/api/article'
+import {getCommentsByArticle, publishComment} from '@/api/comment'
 
-  import default_avatar from '@/assets/img/default_avatar.png'
+import default_avatar from '@/assets/img/default_avatar.png'
 
-  export default {
+export default {
     name: 'BlogView',
     created() {
       this.getArticle()

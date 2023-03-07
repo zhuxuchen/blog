@@ -11,12 +11,12 @@
 
 <script>
 
-  import {mavonEditor} from 'mavon-editor'
-  import 'mavon-editor/dist/css/index.css'
+import {mavonEditor} from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 
-  import {upload} from '@/api/upload'
+import {upload} from '@/api/upload'
 
-  export default {
+export default {
     name: 'MarkdownEditor',
     props: {
       editor: Object

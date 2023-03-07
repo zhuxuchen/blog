@@ -43,11 +43,11 @@
 </template>
 
 <script>
-  import defaultAvatar from '@/assets/img/logo.png'
-  import {getAllCategorysDetail} from '@/api/category'
-  import {getAllTagsDetail} from '@/api/tag'
+import defaultAvatar from '@/assets/img/logo.png'
+import {getAllCategorysDetail} from '@/api/category'
+import {getAllTagsDetail} from '@/api/tag'
 
-  export default {
+export default {
     name: 'BlogAllCategoryTag',
     created() {
       this.getCategorys()

@@ -65,13 +65,13 @@
 </template>
 
 <script>
-  import BaseHeader from '@/views/BaseHeader'
-  import MarkdownEditor from '@/components/markdown/MarkdownEditor'
-  import {publishArticle, getArticleById} from '@/api/article'
-  import {getAllCategorys} from '@/api/category'
-  import {getAllTags} from '@/api/tag'
+import BaseHeader from '@/views/BaseHeader'
+import MarkdownEditor from '@/components/markdown/MarkdownEditor'
+import {getArticleById, publishArticle} from '@/api/article'
+import {getAllCategorys} from '@/api/category'
+import {getAllTags} from '@/api/tag'
 
-  export default {
+export default {
     name: 'BlogWrite',
     mounted() {
 

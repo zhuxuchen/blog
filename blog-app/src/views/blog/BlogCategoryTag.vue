@@ -27,14 +27,14 @@
 </template>
 
 <script>
-  import ArticleScrollPage from '@/views/common/ArticleScrollPage'
-  import {getArticlesByCategory, getArticlesByTag} from '@/api/article'
-  import {getTagDetail} from '@/api/tag'
-  import {getCategoryDetail} from '@/api/category'
-  import defaultAvatar from '@/assets/img/logo.png'
+import ArticleScrollPage from '@/views/common/ArticleScrollPage'
+import {getArticlesByCategory, getArticlesByTag} from '@/api/article'
+import {getTagDetail} from '@/api/tag'
+import {getCategoryDetail} from '@/api/category'
+import defaultAvatar from '@/assets/img/logo.png'
 
 
-  export default {
+export default {
     name: 'BlogCategoryTag',
     created() {
       this.getCategoryOrTagAndArticles()

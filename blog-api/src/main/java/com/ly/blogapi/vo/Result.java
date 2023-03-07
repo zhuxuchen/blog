@@ -2,7 +2,6 @@ package com.ly.blogapi.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.apache.logging.log4j.core.util.JsonUtils;
 
 /**
  * <p>
