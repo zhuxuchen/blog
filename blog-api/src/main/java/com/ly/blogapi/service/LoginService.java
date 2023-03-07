@@ -1,5 +1,6 @@
 package com.ly.blogapi.service;
 
+import com.ly.blogapi.entity.SysUser;
 import com.ly.blogapi.vo.Result;
 import com.ly.blogapi.vo.params.LoginParam;
 
@@ -19,4 +20,6 @@ public interface LoginService {
      * @return com.ly.blogapi.vo.Result
      */
     Result login(LoginParam loginParam);
+
+    SysUser checkToken(String token);
 }

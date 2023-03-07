@@ -2,6 +2,7 @@ package com.ly.blogapi.service;
 
 import com.ly.blogapi.entity.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ly.blogapi.vo.Result;
 
 /**
 * @author zhuxuchen
@@ -10,4 +11,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface SysUserService extends IService<SysUser> {
 
+    /**
+     * 根据 token 查询用户信息
+     * @param token
+     * @return com.ly.blogapi.vo.Result
+     */
+    Result findUserByToken(String token);
 }

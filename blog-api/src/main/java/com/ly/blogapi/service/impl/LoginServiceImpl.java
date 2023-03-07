@@ -1,8 +1,12 @@
 package com.ly.blogapi.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.json.JSONUtil;
+import cn.hutool.jwt.JWT;
+import cn.hutool.jwt.JWTUtil;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.ly.blogapi.entity.SysUser;
 import com.ly.blogapi.service.LoginService;
@@ -11,10 +15,11 @@ import com.ly.blogapi.utils.JWTUtils;
 import com.ly.blogapi.vo.ErrorCode;
 import com.ly.blogapi.vo.Result;
 import com.ly.blogapi.vo.params.LoginParam;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -32,7 +37,7 @@ public class LoginServiceImpl implements LoginService {
     private SysUserService sysUserService;
 
     @Resource
-    private RedisTemplate redisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
 
     private static final String slat = "mszlu!@#";
 
@@ -67,8 +72,25 @@ public class LoginServiceImpl implements LoginService {
         }
 
         String token = JWTUtils.createToken(sysUser.getId());
-        redisTemplate.opsForValue()
+        stringRedisTemplate.opsForValue()
                 .set("TOKEN_" + token, JSONUtil.toJsonStr(sysUser), 1, TimeUnit.DAYS);
         return Result.success(token);
+    }
+
+    @Override
+    public SysUser checkToken(String token) {
+        if (StrUtil.isBlank(token)) {
+            return null;
+        }
+        Map<String, Object> stringObjectMap = JWTUtils.checkToken(token);
+        if (stringObjectMap == null) {
+            return null;
+        }
+        String userJson = stringRedisTemplate.opsForValue().get("TOKEN_" + token);
+        if (StrUtil.isBlank(userJson)) {
+            return null;
+        }
+        SysUser sysUser = JSON.parseObject(userJson, SysUser.class);
+        return sysUser;
     }
 }
