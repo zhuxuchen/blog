@@ -5,6 +5,7 @@ import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
 import com.ly.blogapi.entity.SysUser;
 import com.ly.blogapi.service.LoginService;
+import com.ly.blogapi.utils.UserHolder;
 import com.ly.blogapi.vo.ErrorCode;
 import com.ly.blogapi.vo.Result;
 import org.springframework.stereotype.Component;
@@ -56,6 +57,14 @@ public class LoginInterceptor implements HandlerInterceptor {
             return false;
         }
         // 登录验证成功 放行
+        UserHolder.put(sysUser);
+        System.out.println("sysUser = " + sysUser);
         return true;
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        // 如果不删除ThreadLocal中用完的信息 会有内存泄漏的风险
+        UserHolder.remove();
     }
 }
