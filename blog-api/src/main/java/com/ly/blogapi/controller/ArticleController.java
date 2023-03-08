@@ -3,10 +3,7 @@ package com.ly.blogapi.controller;
 import com.ly.blogapi.service.ArticleService;
 import com.ly.blogapi.vo.Result;
 import com.ly.blogapi.vo.params.PageParams;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -62,5 +59,15 @@ public class ArticleController {
     @PostMapping("/listArchives")
     public Result listArchives() {
         return articleService.listArchives();
+    }
+
+    /**
+     * 根据id查询文章详情
+     * @param articleId
+     * @return com.ly.blogapi.vo.Result
+     */
+    @PostMapping("/view/{id}")
+    public Result findArticleById(@PathVariable("id") Long articleId) {
+        return articleService.findArticleById(articleId);
     }
 }

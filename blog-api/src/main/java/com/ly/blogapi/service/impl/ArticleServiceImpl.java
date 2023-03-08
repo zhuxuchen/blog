@@ -8,12 +8,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ly.blogapi.entity.Article;
 import com.ly.blogapi.mapper.ArticleMapper;
-import com.ly.blogapi.service.ArticleService;
-import com.ly.blogapi.service.SysUserService;
-import com.ly.blogapi.service.TagService;
-import com.ly.blogapi.vo.Archives;
-import com.ly.blogapi.vo.ArticleVo;
-import com.ly.blogapi.vo.Result;
+import com.ly.blogapi.service.*;
+import com.ly.blogapi.vo.*;
 import com.ly.blogapi.vo.params.PageParams;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +36,12 @@ implements ArticleService{
 
     @Resource
     protected SysUserService sysUserService;
+
+    @Resource
+    private ArticleBodyService articleBodyService;
+
+    @Resource
+    private CategoryService categoryService;
 
     @Override
     public Result listArticle(PageParams pageParams) {
@@ -81,6 +83,23 @@ implements ArticleService{
     public Result listArchives() {
         List<Archives> archivesList = articleMapper.listArchives();
         return Result.success(archivesList);
+    }
+
+    @Override
+    public Result findArticleById(Long articleId) {
+        /*
+         * 1、根据id查询文章信息
+         * 2、根据bodyId和categoryId去做关联查询
+         */
+        Article article = articleMapper.selectById(articleId);
+        ArticleVo articleVo = copy(article, true, true);
+        Long articleBodyId = article.getBodyId();
+        ArticleBodyVo articleBody =  articleBodyService.findArticleBodyByArticleBodyId(articleBodyId);
+        articleVo.setBody(articleBody);
+        Integer categoryId = article.getCategoryId();
+        CategoryVo categoryVo = categoryService.findCategoryByCategoryId(categoryId);
+        articleVo.setCategory(categoryVo);
+        return Result.success(articleVo);
     }
 
     private List<ArticleVo> copyList(List<Article> articleList, boolean isTag, boolean isAuthor) {

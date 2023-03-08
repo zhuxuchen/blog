@@ -39,4 +39,11 @@ public interface ArticleService extends IService<Article> {
      * @return com.ly.blogapi.vo.Result
      */
     Result listArchives();
+
+    /**
+     * 查看文章详情
+     * @param articleId 文章id
+     * @return com.ly.blogapi.vo.Result
+     */
+    Result findArticleById(Long articleId);
 }
