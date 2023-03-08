@@ -43,6 +43,9 @@ implements ArticleService{
     @Resource
     private CategoryService categoryService;
 
+    @Resource
+    private ThreadService threadService;
+
     @Override
     public Result listArticle(PageParams pageParams) {
         Page<Article> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
@@ -93,12 +96,16 @@ implements ArticleService{
          */
         Article article = articleMapper.selectById(articleId);
         ArticleVo articleVo = copy(article, true, true);
+
         Long articleBodyId = article.getBodyId();
         ArticleBodyVo articleBody =  articleBodyService.findArticleBodyByArticleBodyId(articleBodyId);
         articleVo.setBody(articleBody);
         Integer categoryId = article.getCategoryId();
         CategoryVo categoryVo = categoryService.findCategoryByCategoryId(categoryId);
         articleVo.setCategory(categoryVo);
+
+        // 把更新阅读数交到线程池中去执行
+        threadService.updateArticleViewCount(articleMapper, article);
         return Result.success(articleVo);
     }
 
