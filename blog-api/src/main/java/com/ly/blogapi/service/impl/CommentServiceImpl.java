@@ -8,9 +8,11 @@ import com.ly.blogapi.entity.SysUser;
 import com.ly.blogapi.service.CommentService;
 import com.ly.blogapi.mapper.CommentMapper;
 import com.ly.blogapi.service.SysUserService;
+import com.ly.blogapi.utils.UserHolder;
 import com.ly.blogapi.vo.CommentVo;
 import com.ly.blogapi.vo.Result;
 import com.ly.blogapi.vo.UserVo;
+import com.ly.blogapi.vo.params.CommentParam;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -46,6 +48,30 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         List<CommentVo> commentVoList = copyList(comments);
         return Result.success(commentVoList);
     }
+
+    @Override
+    public Result comment(CommentParam commentParam) {
+        //拿到当前登陆用户
+        SysUser sysUser = UserHolder.get();
+        Comment comment = new Comment();
+        comment.setArticleId(commentParam.getArticleId());
+        comment.setAuthorId(sysUser.getId());
+        comment.setContent(commentParam.getContent());
+        comment.setCreateDate(System.currentTimeMillis());
+        Long parent = commentParam.getParent();
+        if (parent == null || parent == 0) {
+            comment.setLevel(String.valueOf(1));
+        }else{
+            comment.setLevel(String.valueOf(2));
+        }
+        //如果是空，parent就是0
+        comment.setParentId(parent == null ? 0 : parent);
+        Long toUserId = commentParam.getToUserId();
+        comment.setToUid(toUserId == null ? 0 : toUserId);
+        save(comment);
+        return Result.success(null);
+    }
+
     private List<CommentVo> copyList(List<Comment> comments) {
         List<CommentVo> commentVoList = new ArrayList<>();
         for (Comment comment : comments) {

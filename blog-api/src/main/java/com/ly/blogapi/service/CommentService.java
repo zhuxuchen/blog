@@ -3,6 +3,7 @@ package com.ly.blogapi.service;
 import com.ly.blogapi.entity.Comment;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ly.blogapi.vo.Result;
+import com.ly.blogapi.vo.params.CommentParam;
 
 /**
 * @author zhuxuchen
@@ -17,4 +18,11 @@ public interface CommentService extends IService<Comment> {
      * @return com.ly.blogapi.vo.Result
      */
     Result commentsByArticleId(Long id);
+
+    /**
+     * 发表评论
+     * @param commentParam
+     * @return com.ly.blogapi.vo.Result
+     */
+    Result comment(CommentParam commentParam);
 }
