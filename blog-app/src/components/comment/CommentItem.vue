@@ -24,7 +24,7 @@
       </div>
 
       <div class="me-reply-list">
-        <div class="me-reply-item" v-for="c in comment.childrens" :key="c.id">
+        <div class="me-reply-item" v-for="c in comment.children" :key="c.id">
           <div style="font-size: 14px">
             <span class="me-reply-user">{{c.author.nickname}}:&nbsp;&nbsp;</span>
 
@@ -68,7 +68,7 @@ import {publishComment} from '@/api/comment'
 export default {
     name: "CommentItem",
     props: {
-      articleId: Number,
+      articleId: String,
       comment: Object,
       index: Number,
       rootCommentCounts: Number

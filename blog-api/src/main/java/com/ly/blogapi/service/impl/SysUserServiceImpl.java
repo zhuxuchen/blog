@@ -9,6 +9,7 @@ import com.ly.blogapi.service.SysUserService;
 import com.ly.blogapi.vo.ErrorCode;
 import com.ly.blogapi.vo.LoginUserVo;
 import com.ly.blogapi.vo.Result;
+import com.ly.blogapi.vo.UserVo;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +41,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
         }
         LoginUserVo loginUserVo = BeanUtil.copyProperties(sysUser, LoginUserVo.class);
         return Result.success(loginUserVo);
+    }
+
+    @Override
+    public UserVo findUserVoById(Long authorId) {
+        //根据id查询
+        //为防止sysUser为空增加一个判断
+        SysUser sysUser = getById(authorId);
+        if (sysUser == null){
+            sysUser = new SysUser();
+            sysUser.setId(1L);
+            sysUser.setAvatar("/static/img/logo.b3a48c0.png");
+            sysUser.setNickname("码神之路");
+        }
+        UserVo userVo = new UserVo();
+        BeanUtil.copyProperties(sysUser, userVo);
+        userVo.setId(String.valueOf(sysUser.getId()));
+        return userVo;
     }
 }
 

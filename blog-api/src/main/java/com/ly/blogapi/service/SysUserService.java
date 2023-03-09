@@ -3,6 +3,7 @@ package com.ly.blogapi.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ly.blogapi.entity.SysUser;
 import com.ly.blogapi.vo.Result;
+import com.ly.blogapi.vo.UserVo;
 
 /**
 * @author zhuxuchen
@@ -17,4 +18,11 @@ public interface SysUserService extends IService<SysUser> {
      * @return com.ly.blogapi.vo.Result
      */
     Result findUserByToken(String token);
+
+    /**
+     * 根据id查询用户
+     * @param authorId
+     * @return com.ly.blogapi.vo.UserVo
+     */
+    UserVo findUserVoById(Long authorId);
 }
