@@ -1,12 +1,12 @@
 package com.ly.blogapi.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ly.blogapi.entity.Comment;
 import com.ly.blogapi.entity.SysUser;
-import com.ly.blogapi.service.CommentService;
 import com.ly.blogapi.mapper.CommentMapper;
+import com.ly.blogapi.service.CommentService;
 import com.ly.blogapi.service.SysUserService;
 import com.ly.blogapi.utils.UserHolder;
 import com.ly.blogapi.vo.CommentVo;
@@ -18,8 +18,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-
-import static cn.hutool.extra.cglib.CglibUtil.copyList;
 
 /**
 * @author zhuxuchen
@@ -44,6 +42,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         List<Comment> comments = lambdaQuery()
                 .eq(Comment::getArticleId, id)
                 .eq(Comment::getLevel, 1)
+                .orderByDesc(Comment::getCreateDate)
                 .list();
         List<CommentVo> commentVoList = copyList(comments);
         return Result.success(commentVoList);
@@ -101,6 +100,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
             Long toUid = comment.getToUid();
             UserVo touserVo = this.sysUserService.findUserVoById(toUid);
             commentVo.setToUser(touserVo);
+            String createDate = DateUtil.date(comment.getCreateDate())
+                    .toString("yyyy-MM-dd HH:mm:ss");
+            commentVo.setCreateDate(createDate);
         }
         return commentVo;
     }
@@ -109,6 +111,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         List<Comment> comments = lambdaQuery()
                 .eq(Comment::getParentId, id)
                 .eq(Comment::getLevel, 2)
+                .orderByDesc(Comment::getCreateDate)
                 .list();
         return copyList(comments);
     }
