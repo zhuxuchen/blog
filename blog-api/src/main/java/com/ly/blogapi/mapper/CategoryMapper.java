@@ -1,7 +1,7 @@
 package com.ly.blogapi.mapper;
 
-import com.ly.blogapi.entity.Category;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ly.blogapi.entity.Category;
 
 /**
 * @author zhuxuchen
