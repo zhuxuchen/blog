@@ -2,6 +2,7 @@ package com.ly.blogapi.controller;
 
 import com.ly.blogapi.service.ArticleService;
 import com.ly.blogapi.vo.Result;
+import com.ly.blogapi.vo.params.ArticleParam;
 import com.ly.blogapi.vo.params.PageParams;
 import org.springframework.web.bind.annotation.*;
 
@@ -69,5 +70,15 @@ public class ArticleController {
     @PostMapping("/view/{id}")
     public Result findArticleById(@PathVariable("id") Long articleId) {
         return articleService.findArticleById(articleId);
+    }
+
+    /**
+     * 发布文章
+     * @param articleParam
+     * @return com.ly.blogapi.vo.Result
+     */
+    @PostMapping("/publish")
+    public Result publish(@RequestBody ArticleParam articleParam) {
+        return articleService.publish(articleParam);
     }
 }

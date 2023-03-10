@@ -7,14 +7,21 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ly.blogapi.entity.Article;
+import com.ly.blogapi.entity.ArticleBody;
+import com.ly.blogapi.entity.ArticleTag;
+import com.ly.blogapi.entity.SysUser;
 import com.ly.blogapi.mapper.ArticleMapper;
 import com.ly.blogapi.service.*;
+import com.ly.blogapi.utils.UserHolder;
 import com.ly.blogapi.vo.*;
+import com.ly.blogapi.vo.params.ArticleParam;
 import com.ly.blogapi.vo.params.PageParams;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -45,6 +52,9 @@ implements ArticleService{
 
     @Resource
     private ThreadService threadService;
+
+    @Resource
+    private ArticleTagService articleTagService;
 
     @Override
     public Result listArticle(PageParams pageParams) {
@@ -107,6 +117,49 @@ implements ArticleService{
         // 把更新阅读数交到线程池中去执行
         threadService.updateArticleViewCount(articleMapper, article);
         return Result.success(articleVo);
+    }
+
+    @Override
+    @Transactional
+    public Result publish(ArticleParam articleParam) {
+        SysUser sysUser = UserHolder.get();
+
+        Article article = new Article();
+        article.setAuthorId(sysUser.getId());
+        article.setWeight(0);
+        article.setViewCounts(0);
+        article.setTitle(articleParam.getTitle());
+        article.setSummary(articleParam.getSummary());
+        article.setCommentCounts(0);
+        article.setCreateDate(System.currentTimeMillis());
+        article.setCategoryId(Integer.valueOf(articleParam.getCategory().getId()));
+        // 插入之后会生成文章id
+        save(article);
+
+        List<TagVo> tags = articleParam.getTags();
+        if (tags != null) {
+            List<ArticleTag> articleTags = new ArrayList<>();
+            for (TagVo tag : tags) {
+                Long articleId = article.getId();
+                ArticleTag articleTag = new ArticleTag();
+                articleTag.setArticleId(articleId);
+                articleTag.setTagId(Long.valueOf(tag.getId()));
+                articleTags.add(articleTag);
+            }
+            articleTagService.saveBatch(articleTags);
+        }
+
+        ArticleBody articleBody = new ArticleBody();
+        articleBody.setArticleId(article.getId());
+        articleBody.setContent(articleParam.getBody().getContent());
+        articleBody.setContentHtml(articleParam.getBody().getContentHtml());
+        articleBodyService.save(articleBody);
+
+        article.setBodyId(articleBody.getId());
+        updateById(article);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("id", article.getId().toString());
+        return Result.success(map);
     }
 
     private List<ArticleVo> copyList(List<Article> articleList, boolean isTag, boolean isAuthor) {

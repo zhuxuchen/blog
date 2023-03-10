@@ -3,6 +3,7 @@ package com.ly.blogapi.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ly.blogapi.entity.Article;
 import com.ly.blogapi.vo.Result;
+import com.ly.blogapi.vo.params.ArticleParam;
 import com.ly.blogapi.vo.params.PageParams;
 
 
@@ -46,4 +47,11 @@ public interface ArticleService extends IService<Article> {
      * @return com.ly.blogapi.vo.Result
      */
     Result findArticleById(Long articleId);
+
+    /**
+     * 发布文章
+     * @param articleParam
+     * @return com.ly.blogapi.vo.Result
+     */
+    Result publish(ArticleParam articleParam);
 }
