@@ -39,6 +39,12 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag>
         return Result.success(tagList);
     }
 
+    @Override
+    public Result findAll() {
+        List<Tag> tags = list();
+        return Result.success(copyList(tags));
+    }
+
     private List<TagVo> copyList(List<Tag> tagList) {
         List<TagVo> tagVoList = new ArrayList<>();
         for (Tag tag : tagList) {

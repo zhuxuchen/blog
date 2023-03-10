@@ -32,4 +32,9 @@ public class TagsController {
         int limit = 6;
         return tagService.hot(limit);
     }
+
+    @GetMapping
+    public Result findAll() {
+        return tagService.findAll();
+    }
 }

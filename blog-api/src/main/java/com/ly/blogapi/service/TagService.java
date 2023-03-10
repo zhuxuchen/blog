@@ -27,4 +27,10 @@ public interface TagService extends IService<Tag> {
      * @return com.ly.blogapi.vo.Result
      */
     Result hot(int limit);
+
+    /**
+     * 查询所有标签信息
+     * @return com.ly.blogapi.vo.Result
+     */
+    Result findAll();
 }
