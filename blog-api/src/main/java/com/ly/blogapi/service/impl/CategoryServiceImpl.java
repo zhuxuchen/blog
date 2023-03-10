@@ -6,9 +6,12 @@ import com.ly.blogapi.entity.Category;
 import com.ly.blogapi.service.CategoryService;
 import com.ly.blogapi.mapper.CategoryMapper;
 import com.ly.blogapi.vo.CategoryVo;
+import com.ly.blogapi.vo.Result;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
 * @author zhuxuchen
@@ -27,6 +30,17 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>
         Category category = categoryMapper.selectById(categoryId);
         CategoryVo categoryVo = BeanUtil.copyProperties(category, CategoryVo.class);
         return categoryVo;
+    }
+
+    @Override
+    public Result findAll() {
+        List<Category> categories = list();
+        List<CategoryVo> categoryVos = new ArrayList<>();
+        for (Category category : categories) {
+            CategoryVo categoryVo = BeanUtil.copyProperties(category, CategoryVo.class);
+            categoryVos.add(categoryVo);
+        }
+        return Result.success(categoryVos);
     }
 }
 

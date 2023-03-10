@@ -3,6 +3,7 @@ package com.ly.blogapi.service;
 import com.ly.blogapi.entity.Category;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ly.blogapi.vo.CategoryVo;
+import com.ly.blogapi.vo.Result;
 
 /**
 * @author zhuxuchen
@@ -12,4 +13,6 @@ import com.ly.blogapi.vo.CategoryVo;
 public interface CategoryService extends IService<Category> {
 
     CategoryVo findCategoryByCategoryId(Integer categoryId);
+
+    Result findAll();
 }
