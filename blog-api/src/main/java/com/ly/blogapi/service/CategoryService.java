@@ -15,4 +15,6 @@ public interface CategoryService extends IService<Category> {
     CategoryVo findCategoryByCategoryId(Integer categoryId);
 
     Result findAll();
+
+    Result findAllDetail();
 }

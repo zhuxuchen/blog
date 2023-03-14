@@ -34,6 +34,19 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>
 
     @Override
     public Result findAll() {
+        List<Category> categories = lambdaQuery()
+                .select(Category::getId,Category::getCategoryName)
+                .list();
+        List<CategoryVo> categoryVos = new ArrayList<>();
+        for (Category category : categories) {
+            CategoryVo categoryVo = BeanUtil.copyProperties(category, CategoryVo.class);
+            categoryVos.add(categoryVo);
+        }
+        return Result.success(categoryVos);
+    }
+
+    @Override
+    public Result findAllDetail() {
         List<Category> categories = list();
         List<CategoryVo> categoryVos = new ArrayList<>();
         for (Category category : categories) {
