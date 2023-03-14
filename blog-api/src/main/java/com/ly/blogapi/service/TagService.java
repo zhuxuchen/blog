@@ -33,4 +33,6 @@ public interface TagService extends IService<Tag> {
      * @return com.ly.blogapi.vo.Result
      */
     Result findAll();
+
+    Result findAllDetail();
 }

@@ -41,6 +41,14 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag>
 
     @Override
     public Result findAll() {
+        List<Tag> tags = lambdaQuery()
+                .select(Tag::getId, Tag::getTagName)
+                .list();
+        return Result.success(copyList(tags));
+    }
+
+    @Override
+    public Result findAllDetail() {
         List<Tag> tags = list();
         return Result.success(copyList(tags));
     }
