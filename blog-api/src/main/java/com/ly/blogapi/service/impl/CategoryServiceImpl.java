@@ -55,6 +55,13 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>
         }
         return Result.success(categoryVos);
     }
+
+    @Override
+    public Result categoryDetailById(Long id) {
+        Category category = getById(id);
+        CategoryVo categoryVo = BeanUtil.copyProperties(category, CategoryVo.class);
+        return Result.success(categoryVo);
+    }
 }
 
 

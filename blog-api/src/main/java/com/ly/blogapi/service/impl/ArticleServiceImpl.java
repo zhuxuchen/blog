@@ -60,6 +60,10 @@ implements ArticleService{
     public Result listArticle(PageParams pageParams) {
         Page<Article> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+
+        if (pageParams.getCategoryId() != null) {
+            queryWrapper.eq(Article::getCategoryId, pageParams.getCategoryId());
+        }
         queryWrapper.orderByDesc(Article::getWeight, Article::getCreateDate);
         Page<Article> articlePage = articleMapper.selectPage(page, queryWrapper);
         List<Article> articleList = articlePage.getRecords();
