@@ -64,6 +64,26 @@ implements ArticleService{
         if (pageParams.getCategoryId() != null) {
             queryWrapper.eq(Article::getCategoryId, pageParams.getCategoryId());
         }
+        /*select * from ms_article
+        where id in (
+                select article_id from ms_article_tag
+                where tag_id = #{tagId}
+        )*/
+        List<Long> articleIds = new ArrayList<>();
+        if (pageParams.getTagId() != null) {
+            List<ArticleTag> articleTags = articleTagService.lambdaQuery()
+                    .select(ArticleTag::getArticleId)
+                    .eq(ArticleTag::getTagId, pageParams.getTagId())
+                    .list();
+            for (ArticleTag articleTag : articleTags) {
+                Long articleId = articleTag.getArticleId();
+                articleIds.add(articleId);
+            }
+            if (articleIds.size() > 0) {
+                queryWrapper.in(Article::getId, articleIds);
+            }
+        }
+
         queryWrapper.orderByDesc(Article::getWeight, Article::getCreateDate);
         Page<Article> articlePage = articleMapper.selectPage(page, queryWrapper);
         List<Article> articleList = articlePage.getRecords();
