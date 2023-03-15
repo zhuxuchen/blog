@@ -1,6 +1,7 @@
 package com.ly.blogapi.controller;
 
 import com.ly.blogapi.common.aop.LogAnnotation;
+import com.ly.blogapi.common.cache.Cache;
 import com.ly.blogapi.service.ArticleService;
 import com.ly.blogapi.vo.Result;
 import com.ly.blogapi.vo.params.ArticleParam;
@@ -30,6 +31,7 @@ public class ArticleController {
      * @return com.ly.blogapi.vo.Result
      */
     @LogAnnotation(module = "文章", operation = "获取文章列表")
+    @Cache(expire = 5 * 60 * 1000, name = "list_article")
     @PostMapping
     public Result listArticle(@RequestBody PageParams pageParams) {
         return articleService.listArticle(pageParams);
@@ -39,6 +41,7 @@ public class ArticleController {
      * 首页 最热文章
      * @return com.ly.blogapi.vo.Result
      */
+    @Cache(expire = 5 * 60 * 1000, name = "hot_article")
     @PostMapping("/hot")
     public Result hotArticle() {
         int limit = 5;
@@ -49,6 +52,7 @@ public class ArticleController {
      * 首页 最新文章
      * @return com.ly.blogapi.vo.Result
      */
+    @Cache(expire = 5 * 60 * 1000, name = "new_article")
     @PostMapping("/new")
     public Result newArticle() {
         int limit = 5;
