@@ -3,6 +3,7 @@ package com.ly.blogapi.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -23,7 +24,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 
 /**
@@ -69,19 +70,24 @@ implements ArticleService{
                 select article_id from ms_article_tag
                 where tag_id = #{tagId}
         )*/
-        List<Long> articleIds = new ArrayList<>();
         if (pageParams.getTagId() != null) {
             List<ArticleTag> articleTags = articleTagService.lambdaQuery()
                     .select(ArticleTag::getArticleId)
                     .eq(ArticleTag::getTagId, pageParams.getTagId())
                     .list();
-            for (ArticleTag articleTag : articleTags) {
-                Long articleId = articleTag.getArticleId();
-                articleIds.add(articleId);
-            }
+            List<Long> articleIds = articleTags
+                    .stream().map(ArticleTag::getArticleId)
+                    .collect(Collectors.toList());
             if (articleIds.size() > 0) {
                 queryWrapper.in(Article::getId, articleIds);
             }
+        }
+        if (StrUtil.isNotBlank(pageParams.getYear()) && StrUtil.isNotBlank(pageParams.getMonth())) {
+            queryWrapper
+                    .apply("FROM_UNIXTIME(create_date/1000,'%Y') = {0}",
+                            pageParams.getYear())
+                    .apply("FROM_UNIXTIME(create_date/1000,'%m') = {0}",
+                            pageParams.getMonth());
         }
 
         queryWrapper.orderByDesc(Article::getWeight, Article::getCreateDate);
