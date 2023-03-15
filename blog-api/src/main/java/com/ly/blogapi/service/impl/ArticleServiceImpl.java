@@ -3,6 +3,7 @@ package com.ly.blogapi.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -23,7 +24,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 
 /**
@@ -60,6 +61,35 @@ implements ArticleService{
     public Result listArticle(PageParams pageParams) {
         Page<Article> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+
+        if (pageParams.getCategoryId() != null) {
+            queryWrapper.eq(Article::getCategoryId, pageParams.getCategoryId());
+        }
+        /*select * from ms_article
+        where id in (
+                select article_id from ms_article_tag
+                where tag_id = #{tagId}
+        )*/
+        if (pageParams.getTagId() != null) {
+            List<ArticleTag> articleTags = articleTagService.lambdaQuery()
+                    .select(ArticleTag::getArticleId)
+                    .eq(ArticleTag::getTagId, pageParams.getTagId())
+                    .list();
+            List<Long> articleIds = articleTags
+                    .stream().map(ArticleTag::getArticleId)
+                    .collect(Collectors.toList());
+            if (articleIds.size() > 0) {
+                queryWrapper.in(Article::getId, articleIds);
+            }
+        }
+        if (StrUtil.isNotBlank(pageParams.getYear()) && StrUtil.isNotBlank(pageParams.getMonth())) {
+            queryWrapper
+                    .apply("FROM_UNIXTIME(create_date/1000,'%Y') = {0}",
+                            pageParams.getYear())
+                    .apply("FROM_UNIXTIME(create_date/1000,'%m') = {0}",
+                            pageParams.getMonth());
+        }
+
         queryWrapper.orderByDesc(Article::getWeight, Article::getCreateDate);
         Page<Article> articlePage = articleMapper.selectPage(page, queryWrapper);
         List<Article> articleList = articlePage.getRecords();

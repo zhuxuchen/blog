@@ -53,6 +53,13 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag>
         return Result.success(copyList(tags));
     }
 
+    @Override
+    public Result findDetailById(Long id) {
+        Tag tag = getById(id);
+        TagVo tagVo = BeanUtil.copyProperties(tag, TagVo.class);
+        return Result.success(tagVo);
+    }
+
     private List<TagVo> copyList(List<Tag> tagList) {
         List<TagVo> tagVoList = new ArrayList<>();
         for (Tag tag : tagList) {
